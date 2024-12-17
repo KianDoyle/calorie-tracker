@@ -16,9 +16,6 @@ public class Tracker {
     @Column(name = "item", nullable = false)
     private String item;
 
-    @Column(name = "sku", nullable = false, length = 100)
-    private String sku;
-
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
@@ -39,14 +36,6 @@ public class Tracker {
 
     public void setItem(String item) {
         this.item = item;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public LocalDate getDate() {
