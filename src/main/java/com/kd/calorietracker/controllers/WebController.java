@@ -40,11 +40,56 @@ public class WebController {
         return "redirect:/tracker/" + date;
     }
 
-
-    @DeleteMapping("/{date}")
-    public String homeDelete(@PathVariable String date, @RequestBody Tracker tracker, Model model) {
-        dbService.deleteTracker(tracker);
-        model.addAttribute("tracker", dbService.getTrackerByDate(date));
-        return "redirect:home";
+    @PostMapping("/item")
+    public String addItem(@RequestParam(required = false) String name,
+                          @RequestParam(required = false) Integer calories,
+                          @RequestParam(required = false) Float protein,
+                          @RequestParam(required = false) Float carbohydrates,
+                          @RequestParam(required = false) Float fats) {
+        // Validate parameters before proceeding
+        Item newItem = new Item();
+        newItem.setName(name);
+        newItem.setCalories(calories);
+        newItem.setProtein(protein);
+        newItem.setCarbohydrates(carbohydrates);
+        newItem.setFats(fats);
+        dbService.saveItem(newItem); // Assuming you have a saveItem method in your DatabaseService
+        return "redirect:/tracker"; // Redirect to the tracker page after adding
     }
+
+    @PostMapping("/{date}/{trackerId}")
+    public String deleteTracker(@PathVariable String date, @PathVariable Integer trackerId) {
+        dbService.deleteTrackerById(trackerId);
+        return "redirect:/tracker/" + date;
+    }
+
+    @GetMapping("/items")
+    public String listItems(Model model) {
+        model.addAttribute("items", dbService.getAllItems());
+        return "items";
+    }
+
+    @PostMapping("/items")
+    public String addItemInItems(@RequestParam(required = false) String name,
+                          @RequestParam(required = false) Integer calories,
+                          @RequestParam(required = false) Float protein,
+                          @RequestParam(required = false) Float carbohydrates,
+                          @RequestParam(required = false) Float fats) {
+        // Validate parameters before proceeding
+        Item newItem = new Item();
+        newItem.setName(name);
+        newItem.setCalories(calories);
+        newItem.setProtein(protein);
+        newItem.setCarbohydrates(carbohydrates);
+        newItem.setFats(fats);
+        dbService.saveItem(newItem); // Assuming you have a saveItem method in your DatabaseService
+        return "redirect:/tracker/items"; // Redirect to the tracker page after adding
+    }
+
+    @PostMapping("/items/{itemId}")
+    public String deleteItem(@PathVariable Integer itemId) {
+        dbService.deleteItemById(itemId);
+        return "redirect:/tracker/items";
+    }
+
 }

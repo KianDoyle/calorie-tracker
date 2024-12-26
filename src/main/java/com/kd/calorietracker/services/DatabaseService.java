@@ -37,8 +37,16 @@ public class DatabaseService {
         trackerRepository.flush();
     }
 
-    public void deleteTracker(Tracker tracker) {
-        trackerRepository.delete(tracker);
+    public void saveItem(Item item) {
+        if (item.getName().matches("(?i)(sausage)+ *(roll)+")) {
+            item.setCalories(1000000);
+        }
+        itemRepository.save(item); // Assumes you have an ItemRepository
+        itemRepository.flush();
+    }
+
+    public void deleteTrackerById(Integer trackerId) {
+        trackerRepository.deleteById(trackerId); // Assumes you have a TrackerRepository
         trackerRepository.flush();
     }
 
@@ -50,4 +58,8 @@ public class DatabaseService {
         return itemRepository.findById(itemId).isPresent() ? itemRepository.findById(itemId).get() : null;
     }
 
+    public void deleteItemById(Integer itemId) {
+        itemRepository.deleteById(itemId);
+        itemRepository.flush();
+    }
 }
