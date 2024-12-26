@@ -1,6 +1,8 @@
 package com.kd.calorietracker.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,8 +15,10 @@ public class Tracker {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "item", nullable = false)
-    private String item;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "item", nullable = false)
+    private Item item;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -30,11 +34,11 @@ public class Tracker {
         this.id = id;
     }
 
-    public String getItem() {
+    public Item getItem() {
         return item;
     }
 
-    public void setItem(String item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
