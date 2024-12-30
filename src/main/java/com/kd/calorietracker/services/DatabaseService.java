@@ -38,7 +38,7 @@ public class DatabaseService {
     }
 
     public void saveItem(Item item) {
-        if (item.getName().matches("(?i)(sausage)+ *(roll)+")) {
+        if (item.getName().matches("(?i)([a-z])* *(sausage)+ *(roll)+")) {
             item.setCalories(1000000);
         }
         itemRepository.save(item); // Assumes you have an ItemRepository
