@@ -6,6 +6,8 @@ import com.kd.calorietracker.repositories.ItemRepository;
 import com.kd.calorietracker.repositories.TrackerRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,5 +63,47 @@ public class DatabaseService {
     public void deleteItemById(Integer itemId) {
         itemRepository.deleteById(itemId);
         itemRepository.flush();
+    }
+
+    public ArrayList<ArrayList<Float>> getAllMacrosByDate(String date) {
+        List<Tracker> trackers = trackerRepository.findAll().stream().filter(tracker -> tracker.getDate().toString().equals(date)).toList();
+
+        ArrayList<ArrayList<Float>> macros = new ArrayList<>(trackers.size());
+
+        for (Tracker tracker : trackers) {
+            Float calories = tracker.getItem().getCalories().floatValue();
+            Float protein = tracker.getItem().getProtein();
+            Float carbohydrates = tracker.getItem().getCarbohydrates();
+            Float fats = tracker.getItem().getFats();
+
+            macros.add(new ArrayList<>(List.of(calories, protein, carbohydrates, fats)));
+        }
+
+        return macros;
+
+    }
+
+    public ArrayList<Float> getTotalMacrosByDate(String date) {
+        ArrayList<ArrayList<Float>> macros = getAllMacrosByDate(date);
+        ArrayList<Float> totalMacros = new ArrayList<>();
+
+        Float calories = 0f;
+        Float protein = 0f;
+        Float carbohydrates = 0f;
+        Float fats = 0f;
+
+        for (ArrayList<Float> macroList : macros) {
+            calories += macroList.get(0);
+            protein += macroList.get(1);
+            carbohydrates += macroList.get(2);
+            fats += macroList.get(3);
+        }
+
+        totalMacros.add(calories);
+        totalMacros.add(protein);
+        totalMacros.add(carbohydrates);
+        totalMacros.add(fats);
+
+        return totalMacros;
     }
 }

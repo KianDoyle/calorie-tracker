@@ -28,6 +28,8 @@ public class WebController {
     public String home(@PathVariable String date, Model model) {
         model.addAttribute("tracker", dbService.getTrackerByDate(date));
         model.addAttribute("items", dbService.getAllItems()); // Fetch items for the dropdown
+//        model.addAttribute("macros", dbService.getAllMacrosByDate(date));
+        model.addAttribute("totalMacros", dbService.getTotalMacrosByDate(date));
         model.addAttribute("date", date);
         return "home";
     }
